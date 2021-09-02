@@ -2,7 +2,8 @@ const inputField = document.getElementById('input-field');
 const errorDiv = document.getElementById('error');
 const booksContainer = document.getElementById('books');
 const bookFound = document.getElementById('found');
-
+const spinner = document.getElementById('spinner');
+// spinner.classList.add('d-none');
 //.......Search Button Function.......
 
 const searchBook = () => {
@@ -22,11 +23,12 @@ const searchBook = () => {
     //........Data Load.........
 
     const url = `https://openlibrary.org/search.json?q=${inputText}`;
+    spinner.classList.remove('d-none');
     fetch(url)
         .then(res => res.json())
         .then(data => {
             displayBooks(data.docs);
-
+            spinner.classList.add('d-none');
             //...... error handling .........
             if (data.numFound === 0) {
                 errorDiv.innerText = 'No Result Found!';
