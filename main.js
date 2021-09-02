@@ -1,5 +1,9 @@
 const inputField = document.getElementById('input-field');
 const errorDiv = document.getElementById('error');
+const booksContainer = document.getElementById('books');
+const bookFound = document.getElementById('found');
+
+//.......Search Button Function.......
 
 const searchBook = () => {
     const inputText = inputField.value;
@@ -7,39 +11,38 @@ const searchBook = () => {
     //........ error handling & empty field ...........
 
     inputField.value = ' ';
-    if (inputText === '') {
-        errorDiv.innerText = "Please Write something";
+    booksContainer.textContent = " ";
+    errorDiv.innerText = " "
+    if (inputText === ' ') {
+        errorDiv.innerText = "Please Write a Book Name!";
         return;
     }
+
+
     //........Data Load.........
 
     const url = `https://openlibrary.org/search.json?q=${inputText}`;
     fetch(url)
         .then(res => res.json())
         .then(data => {
+            displayBooks(data.docs);
 
             //...... error handling .........
             if (data.numFound === 0) {
-                errorDiv.innerText = 'No Result Found';
+                errorDiv.innerText = 'No Result Found!';
             }
             else {
-                errorDiv.innerText = ""
+                errorDiv.innerText = " "
             }
-            displayBooks(data.docs);
-
             //........ Search Result ..........
-
-            const bookFound = document.getElementById('found');
             bookFound.innerText = `Search Result: ${data.docs.length} of ${data.numFound}`
-            console.log(data.numFound);
         });
 }
+
 
 // ......Display Result........
 
 const displayBooks = books => {
-    const booksContainer = document.getElementById('books');
-
     booksContainer.textContent = " ";
     books.forEach(book => {
         console.log(book);
