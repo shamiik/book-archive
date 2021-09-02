@@ -1,31 +1,31 @@
+const inputField = document.getElementById('input-field');
 const errorDiv = document.getElementById('error')
+
 const searchBook = () => {
-    const inputField = document.getElementById('input-field');
     const inputText = inputField.value;
-    // console.log(inputText);
-
     inputField.value = ' ';
-    if (inputText === ' ') {
-        errorDiv.innerText = "Please Search something.It's empty."
+    if (inputText === '') {
+        errorDiv.innerText = "Please Write something";
+        return;
     }
-    else {
-        const url = `https://openlibrary.org/search.json?q=${inputText}`;
-        fetch(url)
-            .then(res => res.json())
-            .then(data => displayBooks(data.docs));
+    const url = `https://openlibrary.org/search.json?q=${inputText}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
 
-    }
-
+            if (data.numFound === 0) {
+                errorDiv.innerText = 'No Result Found';
+            }
+            else {
+                errorDiv.innerText = ""
+            }
+            displayBooks(data.docs);
+        });
 }
 
 const displayBooks = books => {
     const booksContainer = document.getElementById('books');
     booksContainer.textContent = " ";
-    // if (books) {
-    //     errorDiv.innerText = 'No result found ';
-    // }
-
-
     books.forEach(book => {
         console.log(book);
         const div = document.createElement('div');
